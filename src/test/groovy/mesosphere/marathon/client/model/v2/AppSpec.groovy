@@ -1,6 +1,8 @@
 package mesosphere.marathon.client.model.v2
 
 import mesosphere.client.common.ModelUtils
+import mesosphere.marathon.client.model.v2.app.App
+import mesosphere.marathon.client.model.v2.app.Residency
 import spock.lang.Specification
 
 class AppSpec extends Specification {

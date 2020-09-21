@@ -1,6 +1,7 @@
 package mesosphere.dcos.client;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import feign.Headers;
@@ -12,23 +13,24 @@ import mesosphere.dcos.client.model.AuthenticateResponse;
 import mesosphere.dcos.client.model.DCOSAuthCredentials;
 import mesosphere.dcos.client.model.Secret;
 import mesosphere.marathon.client.Marathon;
-import mesosphere.marathon.client.model.v2.App;
-import mesosphere.marathon.client.model.v2.DeleteAppTasksResponse;
-import mesosphere.marathon.client.model.v2.DeleteTaskCriteria;
-import mesosphere.marathon.client.model.v2.GetAbdicateLeaderResponse;
-import mesosphere.marathon.client.model.v2.GetAppNamespaceResponse;
-import mesosphere.marathon.client.model.v2.GetAppVersionsResponse;
-import mesosphere.marathon.client.model.v2.GetEventSubscriptionRegisterResponse;
-import mesosphere.marathon.client.model.v2.GetEventSubscriptionsResponse;
-import mesosphere.marathon.client.model.v2.GetLeaderResponse;
-import mesosphere.marathon.client.model.v2.GetMetricsResponse;
-import mesosphere.marathon.client.model.v2.GetPluginsResponse;
-import mesosphere.marathon.client.model.v2.GetServerInfoResponse;
-import mesosphere.marathon.client.model.v2.GetTasksResponse;
-import mesosphere.marathon.client.model.v2.Group;
-import mesosphere.marathon.client.model.v2.Result;
+import mesosphere.marathon.client.MarathonException;
+import mesosphere.marathon.client.model.v2.app.App;
+import mesosphere.marathon.client.model.v2.app.GetAppNamespaceResponse;
+import mesosphere.marathon.client.model.v2.deployment.DeploymentResult;
+import mesosphere.marathon.client.model.v2.eventSubscriptions.EventSubscriptionRegister;
+import mesosphere.marathon.client.model.v2.eventSubscriptions.EventSubscriptions;
+import mesosphere.marathon.client.model.v2.group.Group;
+import mesosphere.marathon.client.model.v2.group.GroupUpdate;
+import mesosphere.marathon.client.model.v2.info.GetAbdicateLeaderResponse;
+import mesosphere.marathon.client.model.v2.info.LeaderInfo;
+import mesosphere.marathon.client.model.v2.info.MarathonInfo;
+import mesosphere.marathon.client.model.v2.logging.LoggerChange;
+import mesosphere.marathon.client.model.v2.logging.Loggers;
+import mesosphere.marathon.client.model.v2.metrics.Metrics;
+import mesosphere.marathon.client.model.v2.plugin.PluginList;
+import mesosphere.marathon.client.model.v2.task.*;
 
-@Headers({ "Content-Type: application/json", "Accept: application/json" })
+@Headers({"Content-Type: application/json", "Accept: application/json"})
 public interface DCOS extends Marathon {
     // DCOS Auth
     @RequestLine("GET /acs/api/v1/auth/login")
@@ -43,6 +45,7 @@ public interface DCOS extends Marathon {
             throws DCOSException;
 
     // Apps
+
     /**
      * @param namespace - All apps under this group/subgroups will be returned. Example "/products/us-east"
      * @return applications
@@ -54,56 +57,56 @@ public interface DCOS extends Marathon {
 
     @RequestLine("DELETE /v2/apps/{appId}?force={force}")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    Result deleteApp(@Param("appId") String appId,
-                     @Param("force") boolean force)
+    DeploymentResult deleteApp(@Param("appId") String appId,
+                               @Param("force") boolean force)
             throws DCOSException;
 
     @RequestLine("DELETE /v2/apps/{appId}/tasks?host={host}&force={force}")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    DeleteAppTasksResponse deleteAppTasksWithHost(@Param("appId") String appId,
-                                                  @Param("host") String host,
-                                                  @Param("force") boolean force)
+    TaskList deleteAppTasksWithHost(@Param("appId") String appId,
+                                    @Param("host") String host,
+                                    @Param("force") boolean force)
             throws DCOSException;
 
     @RequestLine("DELETE /v2/apps/{appId}/tasks?host={host}&force={force}&scale=true")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    Result deleteAppTasksAndScaleWithHost(@Param("appId") String appId,
-                                          @Param("host") String host,
-                                          @Param("force") boolean force)
+    DeploymentResult deleteAppTasksAndScaleWithHost(@Param("appId") String appId,
+                                                    @Param("host") String host,
+                                                    @Param("force") boolean force)
             throws DCOSException;
 
     @RequestLine("DELETE /v2/apps/{appId}/tasks?host={host}&force={force}&wipe=true")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    DeleteAppTasksResponse deleteAppTasksAndWipeWithHost(@Param("appId") String appId,
-                                                         @Param("host") String host,
-                                                         @Param("force") boolean force)
+    TaskList deleteAppTasksAndWipeWithHost(@Param("appId") String appId,
+                                           @Param("host") String host,
+                                           @Param("force") boolean force)
             throws DCOSException;
 
     @RequestLine("DELETE /v2/apps/{appId}/tasks/{taskId}?force={force}")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    DeleteAppTasksResponse deleteAppTasksWithTaskId(@Param("appId") String appId,
-                                                    @Param("taskId") String taskId,
-                                                    @Param("force") boolean force)
+    TaskSingle deleteAppTasksWithTaskId(@Param("appId") String appId,
+                                        @Param("taskId") String taskId,
+                                        @Param("force") boolean force)
             throws DCOSException;
 
     @RequestLine("DELETE /v2/apps/{appId}/tasks/{taskId}?force={force}&scale=true")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    Result deleteAppTasksAndScaleWithTaskId(@Param("appId") String appId,
-                                            @Param("taskId") String taskId,
-                                            @Param("force") boolean force)
+    DeploymentResult deleteAppTasksAndScaleWithTaskId(@Param("appId") String appId,
+                                                      @Param("taskId") String taskId,
+                                                      @Param("force") boolean force)
             throws DCOSException;
 
     @RequestLine("DELETE /v2/apps/{appId}/tasks/{taskId}?force={force}&wipe=true")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    DeleteAppTasksResponse deleteAppTasksAndWipeWithTaskId(@Param("appId") String appId,
-                                                           @Param("taskId") String taskId,
-                                                           @Param("force") boolean force)
+    TaskSingle deleteAppTasksAndWipeWithTaskId(@Param("appId") String appId,
+                                               @Param("taskId") String taskId,
+                                               @Param("force") boolean force)
             throws DCOSException;
 
     // Deployments
     @RequestLine("DELETE /v2/deployments/{deploymentId}?force={force}")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    Result deleteDeployment(@Param("deploymentId") String id) throws DCOSException;
+    DeploymentResult deleteDeployment(@Param("deploymentId") String id) throws DCOSException;
 
     // Groups
     @RequestLine("GET /v2/groups")
@@ -112,15 +115,15 @@ public interface DCOS extends Marathon {
 
     @RequestLine("PUT /v2/groups?force={force}")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    Result modifyGroup(@Param("force") boolean force, Group group) throws DCOSException;
+    DeploymentResult modifyGroup(@Param("force") boolean force, GroupUpdate group) throws DCOSException;
 
     @RequestLine("POST /v2/groups?force={force}")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    Result createGroup(@Param("force") boolean force, Group group) throws DCOSException;
+    DeploymentResult createGroup(@Param("force") boolean force, GroupUpdate group) throws DCOSException;
 
     @RequestLine("DELETE /v2/groups?force={force}")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    Result deleteGroup(@Param("force") boolean force) throws DCOSException;
+    DeploymentResult deleteGroup(@Param("force") boolean force) throws DCOSException;
 
     @RequestLine("GET /v2/groups/versions")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
@@ -128,7 +131,7 @@ public interface DCOS extends Marathon {
 
     @RequestLine("PUT /v2/groups/{id}?force={force}")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    Group modifyGroups(@Param("id") String id,
+    Group modifyGroups(@Param("id") String id, GroupUpdate group,
                        @Param("force") boolean force)
             throws DCOSException;
 
@@ -140,64 +143,64 @@ public interface DCOS extends Marathon {
 
     @RequestLine("DELETE /v2/groups/{id}?force={force}")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    Result deleteGroups(@Param("id") String id,
-                        @Param("force") boolean force)
+    DeploymentResult deleteGroups(@Param("id") String id,
+                                  @Param("force") boolean force)
             throws DCOSException;
 
     @RequestLine("GET /v2/groups/{id}/versions")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    Result getGroupVersion(@Param("id") String id) throws DCOSException;
+    DeploymentResult getGroupVersion(@Param("id") String id) throws DCOSException;
 
     // Tasks
     @RequestLine("GET /v2/tasks?status={status}")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    GetTasksResponse getTasks(@Param("status") String status) throws DCOSException;
+    TaskList getTasks(@Param("status") Status.Condition status) throws DCOSException;
 
-    @RequestLine("DELETE /v2/tasks/delete?force={force}")
+    @RequestLine("POST /v2/tasks/delete?force={force}")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    GetTasksResponse deleteTask(@Param("force") boolean force, DeleteTaskCriteria deleteTaskBody) throws DCOSException;
+    DeleteTaskCriteria deleteTask(@Param("force") boolean force, DeleteTaskCriteria deleteTaskBody) throws DCOSException;
 
     @RequestLine("DELETE /v2/tasks/delete?force={force}&scale=true")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    GetTasksResponse deleteTaskAndScale(@Param("force") boolean force, DeleteTaskCriteria deleteTaskBody)
+    TaskList deleteTaskAndScale(@Param("force") boolean force, DeleteTaskCriteria deleteTaskBody)
             throws DCOSException;
 
     @RequestLine("DELETE /v2/tasks/delete?force={force}&wipe=true")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    GetTasksResponse deleteTaskAndWipe(@Param("force") boolean force, DeleteTaskCriteria deleteTaskBody)
+    TaskList deleteTaskAndWipe(@Param("force") boolean force, DeleteTaskCriteria deleteTaskBody)
             throws DCOSException;
 
     // Event Subscriptions
     @RequestLine("GET /v2/eventSubscriptions")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    GetEventSubscriptionsResponse getSubscriptions() throws DCOSException;
+    EventSubscriptions getSubscriptions() throws DCOSException;
 
     @RequestLine("POST /v2/eventSubscriptions?callbackUrl={url}")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    GetEventSubscriptionRegisterResponse postSubscriptions(@Param("url") String url) throws DCOSException;
+    EventSubscriptionRegister postSubscriptions(@Param("url") String url) throws DCOSException;
 
     @RequestLine("DELETE /v2/eventSubscriptions?callbackUrl={url}")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    GetEventSubscriptionRegisterResponse deleteSubscriptions(@Param("url") String url) throws DCOSException;
+    EventSubscriptionRegister deleteSubscriptions(@Param("url") String url) throws DCOSException;
 
     // Server Info
     @RequestLine("GET /v2/info")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    GetServerInfoResponse getInfo() throws DCOSException;
+    MarathonInfo getInfo() throws DCOSException;
 
-    // GetLeaderResponse
+    // LeaderInfo
     @RequestLine("GET /v2/leader")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    GetLeaderResponse getLeader() throws DCOSException;
+    LeaderInfo getLeader() throws DCOSException;
 
     @RequestLine("DELETE /v2/leader")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    GetAbdicateLeaderResponse deleteLeader() throws DCOSException;
+    GetAbdicateLeaderResponse deleteLeader(@Param("backup?") String backup, @Param("restore?") String restore) throws DCOSException;
 
     // Plugins
     @RequestLine("GET /v2/plugins")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    GetPluginsResponse getPlugin() throws DCOSException;
+    PluginList getPlugin() throws DCOSException;
 
     @RequestLine("GET /v2/plugins/{pluginId}/{path}")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
@@ -227,11 +230,20 @@ public interface DCOS extends Marathon {
 
     @RequestLine("GET /metrics")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    GetMetricsResponse getMetrics() throws DCOSException;
+    Metrics getMetrics() throws DCOSException;
+
+    @RequestLine("GET /logging")
+    @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
+    Loggers getLogging() throws MarathonException;
+
+    @RequestLine("POST /logging")
+    @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
+    Map<String, String> updateLogger(LoggerChange loggerChange);
+
 
     // Convenience methods for identifiable resources.
     default Optional<App> maybeApp(final String id) throws DCOSException {
-        return resource(() -> getApp(id).getApp());
+        return resource(() -> getApp(id).getApps().get(0));
     }
 
     default Optional<Group> maybeGroup(String id) throws DCOSException {
@@ -252,8 +264,9 @@ public interface DCOS extends Marathon {
      * If a {@link DCOSException} is thrown by the {@code resourceSupplier}, it will be caught. If
      * {@link DCOSException#getStatus()} is 404, then an empty optional will be returned. Any other
      * {@link DCOSException} will be rethrown.
+     *
      * @param resourceSupplier {@link ThrowingSupplier} instance for accessing the resource.
-     * @param <T> The resource type
+     * @param <T>              The resource type
      * @return The optional resource.
      * @throws DCOSException if a non-404 DCOSException is thrown.
      */

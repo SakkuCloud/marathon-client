@@ -1,5 +1,6 @@
 package mesosphere.marathon.client.model.v2;
 
+import mesosphere.marathon.client.model.v2.app.App;
 import org.junit.Before;
 import org.junit.Test;
 

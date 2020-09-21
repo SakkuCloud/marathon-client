@@ -1,8 +1,8 @@
 package mesosphere.marathon.client;
 
 import mesosphere.client.common.HttpResponseException;
-import mesosphere.marathon.client.model.v2.ErrorDetail;
-import mesosphere.marathon.client.model.v2.ErrorResponse;
+import mesosphere.marathon.client.model.v2.app.error.ErrorDetail;
+import mesosphere.marathon.client.model.v2.app.error.ErrorResponse;
 
 public class MarathonException extends HttpResponseException {
 	private static final long serialVersionUID = 1L;

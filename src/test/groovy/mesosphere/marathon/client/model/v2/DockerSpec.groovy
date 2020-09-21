@@ -1,6 +1,7 @@
 package mesosphere.marathon.client.model.v2
 
 import mesosphere.client.common.ModelUtils
+import mesosphere.marathon.client.model.v2.app.App
 import spock.lang.Specification
 
 

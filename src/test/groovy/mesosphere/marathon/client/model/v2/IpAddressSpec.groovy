@@ -1,5 +1,7 @@
 package mesosphere.marathon.client.model.v2
 
+import mesosphere.marathon.client.model.v2.app.network.IpAddress
+import mesosphere.marathon.client.model.v2.app.network.IpDiscovery
 import spock.lang.Specification
 import spock.lang.Subject
 

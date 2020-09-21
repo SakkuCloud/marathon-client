@@ -4,12 +4,22 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import mesosphere.marathon.client.Marathon;
 import mesosphere.marathon.client.MarathonClient;
+import mesosphere.marathon.client.model.v2.app.App;
+import mesosphere.marathon.client.model.v2.app.container.Container;
+import mesosphere.marathon.client.model.v2.app.container.Docker;
+import mesosphere.marathon.client.model.v2.pod.volumes.AppExternalVolume;
+import mesosphere.marathon.client.model.v2.pod.volumes.AppVolume;
+import mesosphere.marathon.client.model.v2.pod.volumes.ExternalVolumeInfo;
+import mesosphere.marathon.client.model.v2.pod.volumes.ReadMode;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -35,22 +45,27 @@ public class ExternalVolumeTest {
             app.setContainer(new Container());
             app.getContainer().setDocker(new Docker());
             app.getContainer().getDocker().setImage("mongo");
-            app.getContainer().setVolumes(new ArrayList<Volume>());
+            app.getContainer().setVolumes(new ArrayList<AppVolume>());
 
-            ExternalVolume externalVolume = new ExternalVolume();
-            externalVolume.setName("mongodb-testvol");
-            externalVolume.setMode("RW");
-            externalVolume.setContainerPath("/data/db");
-            externalVolume.setProvider("dvdi");
-            externalVolume.setDriver("rexray");
+            AppExternalVolume externalVolume = AppExternalVolume.builder()
+                    .mode(ReadMode.RW)
+                    .containerPath("/data/db")
+                    .external(ExternalVolumeInfo.builder()
+                            .name("mongodb-testvol")
+                            .provider("dvdi")
+                            .options(new HashMap<String, Object>(){{
+                                put("dvdi/driver", "rexray");
+                            }})
+                            .build())
+                    .build();
 
             app.getContainer().getVolumes().add(externalVolume);
 
             final App appRes = client.createApp(app);
             assertFalse(appRes.getContainer().getVolumes().isEmpty());
 
-            ExternalVolume responseVolume = (ExternalVolume) appRes.getContainer().getVolumes().iterator().next();
-            assertEquals("mongodb-testvol", responseVolume.getExternalVolumeInfo().getName());
+            AppExternalVolume responseVolume = (AppExternalVolume) appRes.getContainer().getVolumes().iterator().next();
+            assertEquals("mongodb-testvol", responseVolume.getExternal().getName());
 
             RecordedRequest request = server.takeRequest();
             assertNotNull(request);

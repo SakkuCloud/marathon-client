@@ -9,7 +9,7 @@ import feign.gson.GsonEncoder;
 import feign.slf4j.Slf4jLogger;
 import mesosphere.client.common.ModelUtils;
 import mesosphere.marathon.client.auth.TokenAuthRequestInterceptor;
-import mesosphere.marathon.client.model.v2.ErrorResponse;
+import mesosphere.marathon.client.model.v2.app.error.ErrorResponse;
 
 import java.io.IOException;
 

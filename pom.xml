@@ -55,6 +55,40 @@
 			<artifactId>nimbus-jose-jwt</artifactId>
 			<version>7.9</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!--jackson-->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jsckson-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-yaml</artifactId>
+			<version>${jsckson-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jsckson-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jsckson-version}</version>
+		</dependency>
+		<!--jackson-->
+
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -97,6 +131,7 @@
 		    <version>2.5.1</version>
 				<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 
 	<licenses>
@@ -140,6 +175,8 @@
 		<guava-version>20.0</guava-version>
 		<junit-version>4.11</junit-version>
 		<mockweb-version>3.5.0</mockweb-version>
+		<lombok-version>1.18.4</lombok-version>
+		<jsckson-version>2.11.1</jsckson-version>
 	</properties>
 
 	<build>
