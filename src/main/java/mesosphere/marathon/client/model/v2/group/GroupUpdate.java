@@ -5,7 +5,6 @@ import mesosphere.client.common.ModelUtils;
 import mesosphere.marathon.client.model.v2.app.App;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * @author AliTM
@@ -20,8 +19,8 @@ import java.util.List;
 public class GroupUpdate extends GroupPartialUpdate {
     private String id;
     private Integer scaleBy;
-    private List<App> apps;
-    private List<GroupUpdate> groups;
+    private Collection<App> apps;
+    private Collection<GroupUpdate> groups;
     private Collection<String> dependencies;
     private String version;
 

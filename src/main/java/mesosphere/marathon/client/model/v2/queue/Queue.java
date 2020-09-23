@@ -1,6 +1,6 @@
 package mesosphere.marathon.client.model.v2.queue;
 
-import java.util.List;
+import java.util.Collection;
 
 import lombok.*;
 import mesosphere.client.common.ModelUtils;
@@ -12,7 +12,7 @@ import mesosphere.client.common.ModelUtils;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Queue {
-    private List<QueueItem> queue;
+    private Collection<QueueItem> queue;
 
     @Override
     public String toString() {

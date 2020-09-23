@@ -7,8 +7,7 @@ import mesosphere.marathon.client.model.v2.app.health.Health;
 import mesosphere.marathon.client.model.v2.app.network.IpAddress;
 import mesosphere.marathon.client.model.v2.pod.volumes.LocalVolumeId;
 
-import java.util.List;
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * @author AliTM
@@ -31,11 +30,11 @@ public class Task {
     private String stagedAt;
     private String startedAt;
     private MesosTaskState state;
-    private Set<Integer> ports;
-    private Set<Integer> servicePorts;
-    private List<LocalVolumeId> localVolumes;
-    private List<IpAddress> ipAddresses;
-    private List<Health> healthCheckResults;
+    private Collection<Integer> ports;
+    private Collection<Integer> servicePorts;
+    private Collection<LocalVolumeId> localVolumes;
+    private Collection<IpAddress> ipAddresses;
+    private Collection<Health> healthCheckResults;
     private CheckStatus checkStatus;
 
 

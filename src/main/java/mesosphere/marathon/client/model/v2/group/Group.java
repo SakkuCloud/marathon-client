@@ -1,6 +1,6 @@
 package mesosphere.marathon.client.model.v2.group;
 
-import java.util.List;
+import java.util.Collection;
 
 import lombok.*;
 import mesosphere.client.common.ModelUtils;
@@ -15,12 +15,12 @@ import mesosphere.marathon.client.model.v2.app.AppInfo;
 @AllArgsConstructor
 public class Group {
     private String id;
-    private List<AppInfo> apps;
-    private List<Group> groups;
-    private List<String> dependencies;
     private String version;
     private Boolean enforceRole;
-    private List<PodStatus> pods;
+    private Collection<AppInfo> apps;
+    private Collection<Group> groups;
+    private Collection<String> dependencies;
+    private Collection<PodStatus> pods;
 
 
     public Group(String id) {
