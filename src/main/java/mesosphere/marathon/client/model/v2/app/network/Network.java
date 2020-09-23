@@ -13,9 +13,9 @@ import mesosphere.client.common.ModelUtils;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Network {
-	public String name;
+	private String name;
 	@Builder.Default
-	public NetworkMode mode = NetworkMode.CONTAINER;
+	private NetworkMode mode = NetworkMode.CONTAINER;
 	@Builder.Default
 	private Map<String, String> labels = new HashMap<>();
 

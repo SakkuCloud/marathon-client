@@ -1,6 +1,7 @@
 package mesosphere.marathon.client.model.v2.queue;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import mesosphere.client.common.ModelUtils;
 import mesosphere.marathon.client.model.v2.app.VersionedApp;
 
@@ -12,9 +13,9 @@ import java.util.List;
  */
 
 @Data
-@Builder
 @Getter
 @Setter
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)

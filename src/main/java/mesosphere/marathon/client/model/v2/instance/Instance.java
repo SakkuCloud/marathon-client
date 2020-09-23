@@ -1,6 +1,7 @@
 package mesosphere.marathon.client.model.v2.instance;
 
 import lombok.*;
+import mesosphere.client.common.ModelUtils;
 import mesosphere.marathon.client.model.v2.app.UnreachableStrategy;
 
 import java.util.Date;
@@ -22,6 +23,7 @@ public class Instance {
     private State state;
     private UnreachableStrategy unreachableStrategy;
 
+
     @Data
     @Builder
     @Getter
@@ -34,5 +36,11 @@ public class Instance {
         private Boolean healthy;
         private Date since;
         private Date activeSince;
+    }
+
+
+    @Override
+    public String toString() {
+        return ModelUtils.toString(this);
     }
 }

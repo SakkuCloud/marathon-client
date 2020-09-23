@@ -3,8 +3,6 @@ package mesosphere.marathon.client.model.v2.app;
 import lombok.*;
 import mesosphere.client.common.ModelUtils;
 
-import java.util.List;
-
 /**
  * @author AliTM
  */
@@ -15,8 +13,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class VersionedList {
-    private List<VersionedApp> apps;
+public class AppInfoSingle {
+    private AppInfo app;
 
 
     @Override

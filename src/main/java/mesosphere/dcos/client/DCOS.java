@@ -243,7 +243,7 @@ public interface DCOS extends Marathon {
 
     // Convenience methods for identifiable resources.
     default Optional<App> maybeApp(final String id) throws DCOSException {
-        return resource(() -> getApp(id).getApps().get(0));
+        return resource(() -> getApp(id).getApp());
     }
 
     default Optional<Group> maybeGroup(String id) throws DCOSException {

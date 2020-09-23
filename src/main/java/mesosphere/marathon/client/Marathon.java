@@ -26,15 +26,15 @@ public interface Marathon {
     // Apps
     @RequestLine("GET /v2/apps")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    VersionedList getApps() throws MarathonException;
+    AppInfoList getApps() throws MarathonException;
 
     @RequestLine("GET /v2/apps")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    VersionedList getApps(@QueryMap Map<String, String> queryMap) throws MarathonException;
+    AppInfoList getApps(@QueryMap Map<String, String> queryMap) throws MarathonException;
 
     @RequestLine("GET /v2/apps/{id}")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    AppInfoList getApp(@Param("id") String id) throws MarathonException;
+    AppInfoSingle getApp(@Param("id") String id) throws MarathonException;
 
     @RequestLine("GET /v2/apps/{id}/tasks")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
@@ -46,7 +46,7 @@ public interface Marathon {
 
     @RequestLine("GET /v2/apps/{id}/versions/{version}")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    App getAppVersion(@Param("id") String id, @Param("version") String version) throws MarathonException;
+    VersionedApp getAppVersion(@Param("id") String id, @Param("version") String version) throws MarathonException;
 
     @RequestLine("GET /v2/tasks")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
@@ -54,7 +54,7 @@ public interface Marathon {
 
     @RequestLine("POST /v2/apps")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    VersionedApp createApp(App app) throws MarathonException;
+    AppInfo createApp(App app) throws MarathonException;
 
     @RequestLine("PUT /v2/apps/{app_id}?force={force}&partialUpdate={partialUpdate}")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
@@ -135,15 +135,15 @@ public interface Marathon {
     // Event Subscriptions
     @RequestLine("POST /v2/eventSubscriptions?callbackUrl={url}")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    public EventSubscriptionRegister register(@Param("url") String url) throws MarathonException;
+    EventSubscriptionRegister register(@Param("url") String url) throws MarathonException;
 
     @RequestLine("DELETE /v2/eventSubscriptions?callbackUrl={url}")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    public EventSubscriptionRegister unregister(@Param("url") String url) throws MarathonException;
+    EventSubscriptionRegister unregister(@Param("url") String url) throws MarathonException;
 
     @RequestLine("GET /v2/eventSubscriptions")
     @Headers(HeaderUtils.MARATHON_API_SOURCE_HEADER)
-    public EventSubscriptions subscriptions() throws MarathonException;
+    EventSubscriptions subscriptions() throws MarathonException;
 
     // Queue
     @RequestLine("GET /v2/queue")

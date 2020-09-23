@@ -1,6 +1,7 @@
 package mesosphere.marathon.client.model.v2.pod.volumes;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import mesosphere.client.common.ModelUtils;
 
 /**
@@ -8,13 +9,12 @@ import mesosphere.client.common.ModelUtils;
  */
 
 @Data
-@Builder
 @Getter
 @Setter
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class PodHostVolume extends PodVolume {
-    private String name;
     private String host;
 }
