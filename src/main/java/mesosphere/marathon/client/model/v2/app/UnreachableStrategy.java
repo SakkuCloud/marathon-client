@@ -22,7 +22,7 @@ public abstract class UnreachableStrategy {
     public static class UnreachableStrategyAdapter implements JsonDeserializer<UnreachableStrategy>, JsonSerializer<UnreachableStrategy> {
         @Override
         public UnreachableStrategy deserialize(JsonElement json, Type type, JsonDeserializationContext context) throws JsonParseException {
-            if (json.getAsString().equalsIgnoreCase("disabled"))
+            if (!json.isJsonObject())
                 return null;
             return context.deserialize(json, UnreachableEnabled.class);
         }
