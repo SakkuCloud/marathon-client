@@ -49,7 +49,7 @@ public class MarathonConfig {
 
     @JsonProperty("mesos_bridge_name")
     @SerializedName("mesos_bridge_name")
-    private Integer mesosBridgeName;
+    private String mesosBridgeName;
 
     @JsonProperty("min_revive_offers_interval")
     @SerializedName("min_revive_offers_interval")
